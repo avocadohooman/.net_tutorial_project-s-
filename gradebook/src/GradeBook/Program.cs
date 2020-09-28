@@ -7,25 +7,20 @@ namespace GradeBook
 	{
 		static void Main(string[] args)
 		{
-			var newBook = new Book("Gary's Life Story");
-			double sum;
-			double highestGrade;
-			double lowestGrade;
+			var newBook = new Book("Gary's Book");
 
-			sum = 0;
-			lowestGrade = double.MaxValue;
-			highestGrade = double.MinValue;
 			newBook.AddGrade(43.1);
 			newBook.AddGrade(31.1);
 			newBook.AddGrade(54.1);
-			newBook.showStatistics(lowestGrade, highestGrade, sum);
+			var stats = newBook.getStatistics();
+			Console.WriteLine($"The average grade is {stats.Average:N1}.\nThe lowerst grade is: {stats.Low}.\nThe highest grade is: {stats.High}");
 			if (args.Length > 0) 
 			{
 				Console.WriteLine("Hello, " + args[0] + "!");
 			}
 			else 
 			{
-				Console.Write("Usage: ./donet run <name>");
+				Console.Write("Usage: ./dotnet run <name>");
 			}
 		}
 	}

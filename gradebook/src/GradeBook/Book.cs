@@ -3,15 +3,22 @@ using System;
 
 namespace GradeBook 
 {
-    	class Book
+    	public class Book
 		{
 			private List<double> grades;
-			private string name;
+			public string Name;
 			
 			public Book(string name)
 			{
-				grades = new List<double>();
-				this.name = name;
+				if (name.Length == 0) 
+				{
+					Console.WriteLine("Please choose a name for the book");
+				}
+				else 
+				{
+					grades = new List<double>();
+					this.Name = name;
+				}
 			}
 
 			public void AddGrade(double grade)
@@ -19,20 +26,24 @@ namespace GradeBook
 				this.grades.Add(grade);
 			}
 
-			public void showStatistics(double lowestGrade, double highestGrade, double sum)
+			public Statistics getStatistics()
 			{
+				var result = new Statistics();
+				result.Average = 0.0;
+				result.High = double.MinValue;
+				result.Low = double.MaxValue;
 				foreach(var grade in grades) 
 				{
-					if (grade > highestGrade) {
-						highestGrade = grade;
+					if (grade > result.High) {
+						result.High = grade;
 					}
-					if (grade < lowestGrade) {
-						lowestGrade = grade;
+					if (grade < result.Low) {
+						result.Low = grade;
 					}
-					sum += grade;
+					result.Average += grade;
 				}
-				sum /= grades.Count;
-				Console.WriteLine($"The average grade is {sum:N1}.\nThe lowerst grade is: {lowestGrade}.\nThe highest grade is: {highestGrade}");
+				result.Average /= grades.Count;
+				return (result);
 			}
 		}
 }
