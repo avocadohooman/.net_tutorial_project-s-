@@ -3,12 +3,41 @@ using System;
 
 namespace GradeBook 
 {
-    	public class Book
+
+		public delegate void GradeAddedDelegate(object sender, EventArgs args);
+
+		public class NamedObject
+		{
+
+			public NamedObject(string name)
+			{
+				Name = name;
+			}
+
+			public string Name
+			{
+				get;
+				set;
+			}
+		}
+
+		public abstract class BookBase : NamedObject
+		{	
+
+			public BookBase(string name) : base(name)
+			{
+
+			}
+			public abstract void AddGrade(double grade);
+		}
+
+    	public class Book : BookBase
 		{
 			private List<double> grades;
-			public string Name;
-			
-			public Book(string name)
+
+			const string CATEGORY = "Science";
+
+			public Book(string name) : base(name)
 			{
 				if (name.Length == 0) 
 				{
@@ -17,7 +46,7 @@ namespace GradeBook
 				else 
 				{
 					grades = new List<double>();
-					this.Name = name;
+					Name = name;
 				}
 			}
 
@@ -51,12 +80,18 @@ namespace GradeBook
 				if (grade <= 100 && grade >= 0)
 				{
 					this.grades.Add(grade);
+					if (GradeAdded != null)
+					{
+						GradeAdded(this, new EventArgs());
+					}
 				}
 				else 
 				{
 					throw new ArgumentException($"Invalid {nameof(grade)}");
 				}
 			}
+
+			public event GradeAddedDelegate GradeAdded;
 
 			public Statistics getStatistics()
 			{

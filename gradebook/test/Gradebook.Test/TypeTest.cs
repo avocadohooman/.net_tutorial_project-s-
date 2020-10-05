@@ -3,8 +3,36 @@ using Xunit;
 
 namespace GradeBook.Test
 {
+
+	public delegate string WriteLogDelegate(string logMessage);
+
     public class TypeTeest
     {
+
+		int count = 0;
+
+		[Fact]
+		public void WriteLogDelegatePointToMethod()
+		{
+			WriteLogDelegate log = IncrementCount;
+
+			log += ReturnMessage;
+
+			var result = log("Hello");
+			Assert.Equal(2, count);
+		}
+
+		string IncrementCount(string message)
+		{
+			count++;
+			return message.ToLower();
+		}
+
+		string ReturnMessage(string message)
+		{
+			count++;
+			return message;
+		}
 
 		[Fact]
 		public void StringManipulation()
@@ -41,21 +69,16 @@ namespace GradeBook.Test
 			Assert.Equal("New Name", book1.Name);
         }
 
-		void GetBookSetName(ref Book book, string name)
-		{
-			book = new Book(name);
-		}
-
 		[Fact]
 		public void CSharpIsPassByValue()
         {
 			var book1 = GetBook("Book 1");
-			GetBookSetName(book1, "Book3");
+			GetBookSetName(ref book1, "Book3");
 
 			Assert.Equal("Book3", book1.Name);
         }
 
-		void GetBookSetName(Book book, string name)
+		void GetBookSetName(ref Book book, string name)
 		{
 			book = new Book(name);
 		}
@@ -90,7 +113,7 @@ namespace GradeBook.Test
 			var book1 = GetBook("Book 1");
 			var book2 = book1.Name;
 
-			Assert.Same(book1, book2);
+			Assert.Same(book1.Name, book2);
         }
 
 		Book GetBook(string name)
